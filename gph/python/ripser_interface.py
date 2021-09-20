@@ -395,7 +395,6 @@ def ripser_parallel(X, maxdim=1, thresh=np.inf, coeff=2, metric="euclidean",
 
     """
 
-    print("!!!doingzZZZZZ\n")
     if metric == 'precomputed':
         dm = X
     else:
