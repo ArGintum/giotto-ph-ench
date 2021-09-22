@@ -936,7 +936,7 @@ public:
                     persistence_simplex_vertices[0].push_back({{std::max(u, v)}, {std::min(u, v), std::max(u, v)}});
                 }
                 dset.link(u, v);
-            } else if (get_index(get_zero_apparent_cofacet(e, 1)) == -1)
+            } else if (get_index(get_zero_apparent_cofacet(e, 1)) == -1 && get_diameter(e) > 0)
                 columns_to_reduce[i++] = e;
         }
         columns_to_reduce.resize(i);
