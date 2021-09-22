@@ -1178,6 +1178,7 @@ public:
         deaths.reserve(columns_to_reduce.size());
 
         std::vector<value_t> diameters(columns_to_reduce.size());
+        std::vector<index_t> death_indices(columns_to_reduce.size());
         std::vector<value_t> essential_pair;
         essential_pair.resize(columns_to_reduce.size());
 
@@ -1305,6 +1306,7 @@ public:
                          * first one ! */
                         size_t location = last_diameter_index++;
                         diameters[location] = get_diameter(pivot);
+                        death_indices[location] = get_index(pivot);
                         deaths.insert({get_index(get_entry(pivot)), location});
                         break;
                     }
@@ -1342,7 +1344,7 @@ public:
                     births_and_deaths_by_dim[dim].push_back(birth);
                     births_and_deaths_by_dim[dim].push_back(death);
                     get_simplex_vertices(get_index(columns_to_reduce[get_index(x.second)]), dim, n, birth_verices.rbegin());
-                    get_simplex_vertices(get_index(it->second), dim + 1, n, death_verices.rbegin());
+                    get_simplex_vertices(death_indices[get_index(it->second)], dim + 1, n, death_verices.rbegin());
                     persistence_simplex_vertices[dim].push_back({birth_verices, death_verices});
 #endif
                 }
