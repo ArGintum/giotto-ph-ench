@@ -62,8 +62,6 @@ PYBIND11_MODULE(gph_ripser, m)
                                                        modulus, num_threads);
             r.compute_barcodes();
             r.copy_results(res);
-            std::cerr << res.births_and_deaths_by_dim.size() << '\n';
-            std::cerr << res.persistence_simplex_vertices.size() << '\n';
             res.num_edges = num_edges;
             return res;
         },
@@ -94,8 +92,6 @@ PYBIND11_MODULE(gph_ripser, m)
             }
             ripserResults res;
             r.copy_results(res);
-            std::cerr << res.births_and_deaths_by_dim.size()<< '\n';
-            std::cerr << res.persistence_simplex_vertices.size()<< '\n';
             res.num_edges = num_edges;
             return res;
         },

@@ -43,7 +43,7 @@
 // #define USE_TRIVIAL_CONCURRENT_HASHMAP
 #define USE_JUNCTION
 #define USE_THREAD_POOL
-#define SORT_BARCODES
+//#define SORT_BARCODES
 
 #include <algorithm>
 #include <atomic>
@@ -824,7 +824,8 @@ public:
                                              dim - 1, *this);
                         while (cofacets.has_next(false)) {
                             const auto& cofacet = cofacets.next();
-                            if (get_diameter(cofacet) <= threshold) {
+                            value_t diam = get_diameter(cofacet);
+                            if (diam <= threshold && diam > 0) {
                                 if (dim != dim_max) {
                                     next_simplices_vec[i].push_back(
                                         {get_diameter(cofacet),
@@ -941,11 +942,11 @@ public:
         columns_to_reduce.resize(i);
         std::reverse(columns_to_reduce.begin(), columns_to_reduce.end());
 
-        for (index_t i = 0; i < n; ++i)
+      /*  for (index_t i = 0; i < n; ++i)
             if (dset.find(i) == i) {
                 births_and_deaths_by_dim[0].push_back(dset.get_birth(i));
                 births_and_deaths_by_dim[0].push_back(std::numeric_limits<value_t>::infinity());
-            }
+            }*/
     }
 
     diameter_entry_t pop_pivot(WorkingColumn& column)
@@ -997,7 +998,8 @@ public:
         cofacets.set_simplex(simplex, dim, *this);
         while (cofacets.has_next()) {
             diameter_entry_t cofacet = cofacets.next();
-            if (get_diameter(cofacet) <= threshold) {
+            value_t cofacet_diameter = get_diameter(cofacet);
+            if (cofacet_diameter > 0 && cofacet_diameter <= threshold) {
                 cofacet_entries.push_back(cofacet);
                 if (check_for_emergent_pair &&
                     (get_diameter(simplex) == get_diameter(cofacet))) {
@@ -1031,7 +1033,8 @@ public:
         cofacets.set_simplex(simplex, dim, *this);
         while (cofacets.has_next()) {
             diameter_entry_t cofacet = cofacets.next();
-            if (get_diameter(cofacet) <= threshold)
+         	  value_t cofacet_diameter = get_diameter(cofacet);
+            if (cofacet_diameter > 0 && cofacet_diameter <= threshold)
                 working_coboundary.push(cofacet);
         }
     }
@@ -1351,7 +1354,7 @@ public:
             for (auto& pair : persistence_pair) {
                 births_and_deaths_by_dim[dim].push_back(pair.first);
                 births_and_deaths_by_dim[dim].push_back(pair.second);
-            }
+	    }
         }
 #endif
         /* essential pairs */
@@ -1361,12 +1364,12 @@ public:
             std::sort(essential_pair.begin(), essential_pair.end(),
                       std::greater<>());
 #endif
-            for (size_t i = 0; i < idx_essential; ++i) {
+       /*     for (size_t i = 0; i < idx_essential; ++i) {
                 if (!std::isinf(essential_pair[i])) {
                     births_and_deaths_by_dim[dim].push_back(essential_pair[i]);
                     births_and_deaths_by_dim[dim].push_back(std::numeric_limits<value_t>::infinity());
                 }
-            }
+            }*/
         }
     }
 
@@ -1595,3 +1598,4 @@ std::vector<diameter_index_t> ripser<sparse_distance_matrix>::get_edges()
         }
     return edges;
 }
+
