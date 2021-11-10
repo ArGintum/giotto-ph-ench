@@ -825,7 +825,7 @@ public:
                         while (cofacets.has_next(false)) {
                             const auto& cofacet = cofacets.next();
                             value_t diam = get_diameter(cofacet);
-                            if (diam <= threshold && diam > 0) {
+                            if (diam <= threshold) {
                                 if (dim != dim_max) {
                                     next_simplices_vec[i].push_back(
                                         {get_diameter(cofacet),
@@ -936,7 +936,7 @@ public:
                     persistence_simplex_vertices[0].push_back({{std::max(u, v)}, {std::min(u, v), std::max(u, v)}});
                 }
                 dset.link(u, v);
-            } else if (get_index(get_zero_apparent_cofacet(e, 1)) == -1 && get_diameter(e) > 0)
+            } else if (get_index(get_zero_apparent_cofacet(e, 1)) == -1)
                 columns_to_reduce[i++] = e;
         }
         columns_to_reduce.resize(i);
@@ -999,7 +999,7 @@ public:
         while (cofacets.has_next()) {
             diameter_entry_t cofacet = cofacets.next();
             value_t cofacet_diameter = get_diameter(cofacet);
-            if (cofacet_diameter > 0 && cofacet_diameter <= threshold) {
+            if (cofacet_diameter <= threshold) {
                 cofacet_entries.push_back(cofacet);
                 if (check_for_emergent_pair &&
                     (get_diameter(simplex) == get_diameter(cofacet))) {
@@ -1034,7 +1034,7 @@ public:
         while (cofacets.has_next()) {
             diameter_entry_t cofacet = cofacets.next();
          	  value_t cofacet_diameter = get_diameter(cofacet);
-            if (cofacet_diameter > 0 && cofacet_diameter <= threshold)
+            if (cofacet_diameter <= threshold)
                 working_coboundary.push(cofacet);
         }
     }
