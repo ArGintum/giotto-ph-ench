@@ -445,12 +445,12 @@ def ripser_parallel(X, maxdim=1, thresh=np.inf, coeff=2, metric="euclidean",
             row, col, data = gph_collapser.\
                 flag_complex_collapse_edges_dense(dm.astype(np.float32),
                                                   thresh)
-        elif not compute_enclosing_radius:
+        else:
             # If the user specifies a threshold, we use a sparse
             # representation like Ripser does
-            dm[dm > thresh] = 0.0
-            row, col, data = _resolve_symmetry_conflicts(coo_matrix(dm))
-        else:
+            # dm[dm > thresh] = 0.0
+            # row, col, data = _resolve_symmetry_conflicts(coo_matrix(dm))
+        #else:
             use_sparse_computer = False
 
     if use_sparse_computer:
