@@ -396,7 +396,10 @@ def ripser_parallel(X, maxdim=1, thresh=np.inf, coeff=2, metric="euclidean",
     """
 
     if metric == 'precomputed':
-        dm = X
+        n = X.shape[0] // 2
+        dm = X + 1
+        dm[:n, :n] = 0
+        dm[:n, n:] -= np.eye(n)
     else:
         dm = pairwise_distances(X, metric=metric, **metric_params)
 

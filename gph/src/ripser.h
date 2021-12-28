@@ -908,6 +908,9 @@ public:
         for (index_t i = 0; i < n; i++) {
             dset.set_birth(i, get_vertex_birth(i));
         }
+//	for (index_t i = 1; i < n / 2; i++) {
+//		dset.link(0, i);
+//	}
 
         edges = get_edges();
         para_sort::sort(edges.rbegin(), edges.rend(),
@@ -917,7 +920,9 @@ public:
                         ,
                         p.get());
 #endif
+
         std::vector<index_t> vertices_of_edge(2);
+	index_t mid = n / 2;
         columns_to_reduce.resize(edges.size());
         size_t i = 0;
         for (auto e : edges) {
@@ -926,27 +931,12 @@ public:
                     v = dset.find(vertices_of_edge[1]);
 
             if (u != v) {
-                // Elder rule; youngest class (max birth time of u and v)
-                // dies first
-                value_t birth = std::max(dset.get_birth(u), dset.get_birth(v));
-                value_t death = get_diameter(e);
-                if (death > birth) {
-                    births_and_deaths_by_dim[0].push_back(birth);
-                    births_and_deaths_by_dim[0].push_back(death);
-                    persistence_simplex_vertices[0].push_back({{std::max(u, v)}, {std::min(u, v), std::max(u, v)}});
-                }
                 dset.link(u, v);
-            } else if (get_index(get_zero_apparent_cofacet(e, 1)) == -1)
+            } else if (vertices_of_edge[0] >= mid && get_index(get_zero_apparent_cofacet(e, 1)) == -1)
                 columns_to_reduce[i++] = e;
         }
         columns_to_reduce.resize(i);
         std::reverse(columns_to_reduce.begin(), columns_to_reduce.end());
-
-      /*  for (index_t i = 0; i < n; ++i)
-            if (dset.find(i) == i) {
-                births_and_deaths_by_dim[0].push_back(dset.get_birth(i));
-                births_and_deaths_by_dim[0].push_back(std::numeric_limits<value_t>::infinity());
-            }*/
     }
 
     diameter_entry_t pop_pivot(WorkingColumn& column)
@@ -1339,10 +1329,10 @@ public:
                 value_t birth = get_diameter(columns_to_reduce[get_index(x.second)]);
                 if (death > birth * ratio) {
 #if defined(SORT_BARCODES)
-                    persistence_pair.push_back({birth, death});
+                    persistence_pair.push_back({birth - 1, death - 1});
 #else
-                    births_and_deaths_by_dim[dim].push_back(birth);
-                    births_and_deaths_by_dim[dim].push_back(death);
+                    births_and_deaths_by_dim[dim].push_back(birth - 1);
+                    births_and_deaths_by_dim[dim].push_back(death - 1);
                     get_simplex_vertices(get_index(columns_to_reduce[get_index(x.second)]), dim, n, birth_verices.rbegin());
                     get_simplex_vertices(death_indices[get_index(it->second)], dim + 1, n, death_verices.rbegin());
                     persistence_simplex_vertices[dim].push_back({birth_verices, death_verices});
