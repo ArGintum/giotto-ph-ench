@@ -46,31 +46,26 @@ CLASSIFIERS = ["Intended Audience :: Science/Research",
                "Operating System :: POSIX",
                "Operating System :: Unix",
                "Operating System :: MacOS",
-               "Programming Language :: Python :: 3.6",
                "Programming Language :: Python :: 3.7",
                "Programming Language :: Python :: 3.8",
-               "Programming Language :: Python :: 3.9"]
+               "Programming Language :: Python :: 3.9",
+               "Programming Language :: Python :: 3.10"]
 KEYWORDS = "machine learning, topological data analysis, persistent " \
            "homology"
 INSTALL_REQUIRES = requirements
-EXTRAS_REQUIRE = {"tests": ["pandas",
-                            "pytest",
+EXTRAS_REQUIRE = {"tests": ["pytest",
                             "pytest-cov",
                             "pytest-azurepipelines",
                             "pytest-benchmark",
                             "jupyter_contrib_nbextensions",
                             "flake8",
                             "hypothesis"],
-                  "doc": ["openml",
-                          "sphinx",
+                  "doc": ["sphinx",
                           "nbconvert",
                           "sphinx-issues",
                           "sphinx_rtd_theme",
                           "numpydoc"],
-                  "examples": ["jupyter",
-                               "pandas",
-                               "openml",
-                               "matplotlib"]}
+                  "examples": ["jupyter"]}
 
 
 def combine_requirements(base_keys):
